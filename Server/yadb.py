@@ -1,4 +1,3 @@
-from shelve import DbfilenameShelf
 import socket
 
 PORT = 3337  # The port used by the server
