@@ -2,6 +2,10 @@
 
 import configparser
 import json
+import socket
+from builtins import ConnectionRefusedError
+
+PORT = 3338
 
 def parseConfig(iniFile, operationType):
     config = configparser.ConfigParser()
@@ -36,3 +40,19 @@ def getServers(jsonRequest, iniFile):
     # print("Operation type:", operationType)
     servers = parseConfig(iniFile, operationType)
     return servers
+
+def connectToServer(request, server):
+    serverIp, serverSock = server.split(',')
+    serverSock = int(serverSock)
+    print(f"Connecting to {serverIp, serverSock}")
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((serverIp, serverSock))
+        sock.sendall(request)
+        sock.close()
+        print(f"Closed connection to {serverIp, serverSock}")
+    except:
+        print(f"Server ({serverIp, serverSock}) is down")
+    
+    return None
+            
