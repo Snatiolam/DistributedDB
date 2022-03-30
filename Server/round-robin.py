@@ -3,12 +3,17 @@
 import socket
 import selectors
 import types
-from parser import parseConfig, parseRequest
+import parser
+import random
 
 sel = selectors.DefaultSelector()
 
 HOST = "127.0.0.1"
 PORT = 3337
+
+def getRandomServer(servers):
+    serverNames = list(servers)
+    return random.choice(serverNames)
 
 def accept_wrapper(sock):
     conn, addr = sock.accept()
@@ -32,16 +37,16 @@ def service_connection(key, mask):
 
     if mask & selectors.EVENT_WRITE:
         if data.outb:
-            parseRequest(data.outb)
+            jsonRequest = parser.parseRequest(data.outb)
+            servers = parser.getServers(jsonRequest, "Server/config.ini")
+            databaseServer = getRandomServer(servers)
+            print("Random server:", databaseServer)
             # Logic before resetting data.outb var
             sent = sock.send(data.outb)
             data.outb = data.outb[sent:]
             
 
 def main():
-    # servers = parseConfig('config.ini', 'READ')
-    # print(servers)
-
     lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     lsock.bind((HOST, PORT))
     lsock.listen()
@@ -51,7 +56,6 @@ def main():
     try:
         while True:
             events = sel.select(timeout=None)
-            print(len(events[0]))
             for key, mask in events:
                 if key.data is None:
                     accept_wrapper(key.fileobj)

@@ -1,13 +1,15 @@
 #!/bin/env python3
 
 import configparser
+import json
 
-def parseConfig(iniFile, section):
+def parseConfig(iniFile, operationType):
     config = configparser.ConfigParser()
     config.read(iniFile)
-    if section == 'WRITE':
+    # print("\n------ Parsing configurations file ------")
+    if operationType == 'WRITE':
         sectionItems = dict(config.items('Master'))
-    elif section == 'READ':
+    elif operationType == 'READ':
         sectionItems = dict(config.items('Master'))
         sectionItems.update(dict(config.items('Slaves')))
     else:
@@ -15,5 +17,20 @@ def parseConfig(iniFile, section):
     return sectionItems
 
 def parseRequest(request):
-    print("Parsing -----------")
-    print(request)
+    # print('\n------- Parsing request --------')
+    strRequest = request.decode('utf-8')
+    strRequest = strRequest.replace('\'', '\"')
+    jsonRequest = json.loads(strRequest)
+    print(jsonRequest)
+    return jsonRequest
+    
+def getServers(jsonRequest, iniFile):
+    requestType = jsonRequest["type"]
+    # print("Request type:", requestType)
+    if requestType == "create" or requestType == "update" or requestType == "delete":
+        operationType = "WRITE"
+    elif requestType == "read":
+        operationType = "READ"
+    # print("Operation type:", operationType)
+    servers = parseConfig(iniFile, operationType)
+    return servers
