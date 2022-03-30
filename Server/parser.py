@@ -21,7 +21,7 @@ def parseRequest(request):
     strRequest = request.decode('utf-8')
     strRequest = strRequest.replace('\'', '\"')
     jsonRequest = json.loads(strRequest)
-    print(jsonRequest)
+    # print(jsonRequest)
     return jsonRequest
     
 def getServers(jsonRequest, iniFile):
@@ -29,8 +29,10 @@ def getServers(jsonRequest, iniFile):
     # print("Request type:", requestType)
     if requestType == "create" or requestType == "update" or requestType == "delete":
         operationType = "WRITE"
+        print('WRITING TO SERVERS')
     elif requestType == "read":
         operationType = "READ"
+        print('READING FROM SERVERS')
     # print("Operation type:", operationType)
     servers = parseConfig(iniFile, operationType)
     return servers

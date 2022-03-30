@@ -40,11 +40,10 @@ def service_connection(key, mask):
             jsonRequest = parser.parseRequest(data.outb)
             servers = parser.getServers(jsonRequest, "Server/config.ini")
             databaseServer = getRandomServer(servers)
-            print("Random server:", databaseServer)
+            # print("Random server:", databaseServer)
             # Logic before resetting data.outb var
             sent = sock.send(data.outb)
-            data.outb = data.outb[sent:]
-            
+            data.outb = data.outb[sent:]        
 
 def main():
     lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

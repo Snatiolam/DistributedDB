@@ -30,6 +30,7 @@ class Table(Connection):
             } 
         jsonBytes = bytes(str(json), 'utf-8') 
         self.sock.sendall(jsonBytes)
+        data = self.sock.recv(1024)
 
     def get(self, key):
         json = {
@@ -40,6 +41,7 @@ class Table(Connection):
             } 
         jsonBytes = bytes(str(json), 'utf-8') 
         self.sock.sendall(jsonBytes)
+        data = self.sock.recv(1024)
 
     def delete(self, key, value):
         json = {
@@ -51,6 +53,7 @@ class Table(Connection):
             } 
         jsonBytes = bytes(str(json), 'utf-8') 
         self.sock.sendall(jsonBytes)
+        data = self.sock.recv(1024)
 
     def update(self, key, oldval, newval):
         json = {
@@ -63,6 +66,7 @@ class Table(Connection):
             } 
         jsonBytes = bytes(str(json), 'utf-8') 
         self.sock.sendall(jsonBytes)
+        data = self.sock.recv(1024)
 
 def connect(host, db):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
