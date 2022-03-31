@@ -1,0 +1,5 @@
+200: Succesfull
+201: Modification Successful
+204: Resource Deleted
+400: Not Found
+500: Unexpected Error
