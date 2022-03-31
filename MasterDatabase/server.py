@@ -1,21 +1,18 @@
-import sys
 import socket
 import selectors
 import types
-
-HOST = "127.0.0.1"
-PORT = 3337
+import parser
+import random
 
 sel = selectors.DefaultSelector()
 
-lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-lsock.bind((HOST, PORT))
-lsock.listen()
-print(f"Listening on {(HOST, PORT)}")
-sel.register(lsock, selectors.EVENT_READ, data=None)
+HOST = "127.0.0.1"
+PORT = 3340
+
+sel = selectors.DefaultSelector()
 
 def accept_wrapper(sock):
-    conn, addr = sock.accept()  # Should be ready to read
+    conn, addr = sock.accept()
     print(f"Accepted connection from {addr}")
     conn.setblocking(False)
     data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"")
@@ -26,21 +23,35 @@ def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
     if mask & selectors.EVENT_READ:
-        recv_data = sock.recv(1024)  # Should be ready to read
+        recv_data = sock.recv(1024)
         if recv_data:
             data.outb += recv_data
         else:
             print(f"Closing connection to {data.addr}")
             sel.unregister(sock)
             sock.close()
+
     if mask & selectors.EVENT_WRITE:
         if data.outb:
-            print(f"Echoing {data.outb!r} to {data.addr}")
-            sent = sock.send(data.outb)  # Should be ready to write
-            data.outb = data.outb[sent:]
+            jsonRequest = parser.parseRequest(data.outb)
+            print(jsonRequest)
+            #servers = parser.getServers(jsonRequest, "Server/config.ini")
+            #databaseServer = getRandomServer(servers)
+            #response = parser.connectToServer(data.outb, servers[databaseServer])
+            # print("Random server:", databaseServer)
+            # Logic before resetting data.outb var
+            
+            sent = sock.send(data.outb)
+            data.outb = data.outb[sent:]      
 
 
 def main():
+    lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    lsock.bind((HOST, PORT))
+    lsock.listen()
+    print(f"Listening on {(HOST, PORT)}")
+    sel.register(lsock, selectors.EVENT_READ, data=None)
+
     try:
         while True:
             events = sel.select(timeout=None)

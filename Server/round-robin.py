@@ -41,6 +41,7 @@ def service_connection(key, mask):
             servers = parser.getServers(jsonRequest, "Server/config.ini")
             databaseServer = getRandomServer(servers)
             response = parser.connectToServer(data.outb, servers[databaseServer])
+            print("Prueba:", response)
             # print("Random server:", databaseServer)
             # Logic before resetting data.outb var
             sent = sock.send(data.outb)

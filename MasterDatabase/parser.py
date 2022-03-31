@@ -49,11 +49,10 @@ def connectToServer(request, server):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((serverIp, serverSock))
         sock.sendall(request)
-        data = sock.recv(1024)
         sock.close()
         print(f"Closed connection to {serverIp, serverSock}")
     except:
         print(f"Server ({serverIp, serverSock}) is down")
     
-    return data
+    return None
             
