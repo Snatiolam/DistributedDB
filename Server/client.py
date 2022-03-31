@@ -1,17 +1,12 @@
-import socket
+import yadb
 
-HOST = "127.0.0.1"  # The server's hostname or IP address
-PORT = 3337  # The port used by the server
+HOST = "127.0.0.1"
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((HOST, PORT))
-    json = {
-        "type": "create",
-        "key": "ciudad",
-        "value": "New York"
-        }  
-    json = bytes(str(json), 'utf-8') 
-    s.sendall(json)
-    #data = s.recv(1024)
-
-#print(f"Received {data!r}")
+myConnection = yadb.connect(HOST, 'MyDB')
+myTable = myConnection.get("Tabla Prueba")
+# myTable.get("key1")
+myTable.put("key1", "algun dato simple o complejo")
+# myTable.delete("key1", "value 1")
+# myTable.update("key1", "old val", "new val")
+# myTable.close()
+myTable.close()
