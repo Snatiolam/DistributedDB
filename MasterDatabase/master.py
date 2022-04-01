@@ -15,7 +15,7 @@ def create(variables_dict):
     return file_handler.create(variables_dict["dbname"], variables_dict["table"], variables_dict["key"], variables_dict["values"])
     
 def read(variables_dict):
-    pass
+    return file_handler.read(variables_dict["dbname"], variables_dict["table"], variables_dict["key"])
 
 def update(variables_dict):
     return file_handler.update(variables_dict["dbname"], variables_dict["table"], variables_dict["key"], variables_dict["new_values"])

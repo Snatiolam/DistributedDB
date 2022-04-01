@@ -114,16 +114,37 @@ def update(database, table, key, new_values):
         return json.dumps({"status": 500, "message": " Unexpected Error"})
 
 
-def read(file_name):
+def read(database, table, key):
     os.chdir(DIR + "/DataBases")
 
     try:
-        file = open(directory + "/" + file_name, "rb")
-        content = file.read()
-        file.close()
-        return content
+
+        if os.path.exists(database):
+            os.chdir(database)
+
+            if os.path.exists(table):
+                os.chdir(table)
+                keys_file = open("index.json", "r+")
+                file_content = keys_file.read()
+                json_keys = json.loads(file_content)
+
+                if key in json_keys:
+                    values_array = list()
+                    for fileName in json_keys[key]:
+                        file = open(fileName)
+                        content = file.read()
+                        values_array.append(content)
+                        file.close()
+                    keys_file.close()
+                    return json.dumps({"status": 200, "message": "Succesfull", "values": values_array})
+
+                return json.dumps({"status": 404, "message": "Key Not Found"})
+
+            return json.dumps({"status": 404, "message": "Table Not Found"})
+
+        return json.dumps({"status": 404, "message": "Database Not Found"})
     except Exception as exception:
-        return FAILURE
+        return json.dumps({"status": 500, "message": " Unexpected Error"})
 
 def files_for_values(key, values):
     if(type(values) == str):
