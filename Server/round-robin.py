@@ -4,7 +4,7 @@ import socket
 import selectors
 import types
 import parser
-from colorama import Fore
+import debug
 
 sel = selectors.DefaultSelector()
 
@@ -38,7 +38,7 @@ def service_connection(key, mask):
             response = parser.connectToServer(data.outb, servers)
             if response == None:
                 response = b'There is no response from servers, the servers should be down'
-                print(Fore.RED + "\nThere is no response from servers, the servers should be down" + Fore.WHITE)
+                debug.printError("\nThere is no response from servers, the servers should be down")
             else:
                 print("\nServer response:", response)
             # print("Random server:", databaseServer)
@@ -50,7 +50,7 @@ def main():
     lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     lsock.bind((HOST, PORT))
     lsock.listen()
-    print(Fore.GREEN + f"Listening on {(HOST, PORT)}" + Fore.WHITE)
+    debug.printSuccess(f"Listening on {(HOST, PORT)}")
     sel.register(lsock, selectors.EVENT_READ, data=None)
 
     try:
