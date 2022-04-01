@@ -22,8 +22,10 @@ def accept_wrapper(sock):
 def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
+
     if mask & selectors.EVENT_READ:
         recv_data = sock.recv(1024)
+
         if recv_data:
             data.outb += recv_data
         else:
@@ -32,13 +34,16 @@ def service_connection(key, mask):
             sock.close()
 
     if mask & selectors.EVENT_WRITE:
+
         if data.outb:
             jsonRequest = parser.parseRequest(data.outb)
             servers = parser.getServers(jsonRequest, "Server/config.ini")
             response = parser.connectToServer(data.outb, servers)
+
             if response == b'':
                 response = b'{"status" : 500, "message" : "Error"}'
                 debug.printError("\nThere is no response from servers, the servers should be down")
+                
             print("Response but in round:", response)
             # Logic before resetting data.outb var
             sock.send(response)
@@ -56,13 +61,17 @@ def main():
     sel.register(lsock, selectors.EVENT_READ, data=None)
 
     try:
+
         while True:
             events = sel.select(timeout=None)
+
             for key, mask in events:
+
                 if key.data is None:
                     accept_wrapper(key.fileobj)
                 else:
                     service_connection(key, mask)
+
     except KeyboardInterrupt:
         print("Caught keyboard interrupt, exiting")
     finally:
