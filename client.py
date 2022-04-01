@@ -7,8 +7,9 @@ myTable = myConnection.get("Siata")
 
 # myTable.put("pruebas", ["apple", "banana", "cherry"])
 # myTable.put("care monda", "Shiiii")
-myTable.get("care monda")
 #myTable.delete("pruebas", "value 1")
+lista = myTable.get("care monda")
+print(lista) 
 #myTable.update("pesero", ["rojo", "azul", "morado"])
 
 myTable.close()

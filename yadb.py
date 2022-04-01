@@ -33,7 +33,7 @@ class Table(Connection):
         response = self.sock.recv(1024)
         strResponse = response.decode('utf-8').replace("'", '"')
         jsonResponse = json.loads(strResponse)
-        print("Received:", strResponse)
+        print("Received:", jsonResponse)
 
     def get(self, key):
         request = {
@@ -47,7 +47,9 @@ class Table(Connection):
         response = self.sock.recv(1024)
         strResponse = response.decode('utf-8').replace("'", '"')
         jsonResponse = json.loads(strResponse)
-        print("Received:", strResponse)
+        print("Received:", jsonResponse)
+        if jsonResponse["status"] == 200:
+            return jsonResponse["values"]
 
     def delete(self, key, value):
         request = {
@@ -62,7 +64,7 @@ class Table(Connection):
         response = self.sock.recv(1024)
         strResponse = response.decode('utf-8').replace("'", '"')
         jsonResponse = json.loads(strResponse)
-        print("Received:", strResponse)
+        print("Received:", jsonResponse)
 
     def update(self, key, new_values):
         request = {
@@ -77,7 +79,7 @@ class Table(Connection):
         response = self.sock.recv(1024)
         strResponse = response.decode('utf-8').replace("'", '"')
         jsonResponse = json.loads(strResponse)
-        print("Received:", strResponse)
+        print("Received:", jsonResponse)
 
 def connect(host, db):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
