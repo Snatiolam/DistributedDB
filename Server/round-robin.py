@@ -44,7 +44,7 @@ def service_connection(key, mask):
             sock.send(response)
             data.outb = b''
 
-            # Not sure what below iw happening
+            #  ----- Not sure what below is happening -------
             # sent = sock.send(data.outb)
             # data.outb = data.outb[sent:] 
 
