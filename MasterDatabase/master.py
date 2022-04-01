@@ -18,7 +18,7 @@ def read(variables_dict):
     pass
 
 def update(variables_dict):
-    pass
+    return file_handler.update(variables_dict["dbname"], variables_dict["table"], variables_dict["key"], variables_dict["new_values"])
 
 def delete(variables_dict):
     return file_handler.delete(variables_dict["dbname"], variables_dict["table"], variables_dict["key"])

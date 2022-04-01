@@ -81,16 +81,38 @@ def delete(database, table, key):
     except Exception as exception:
         return json.dumps({"status": 500, "message": " Unexpected Error"})
 
-def update(file_name, content):
+def update(database, table, key, new_values):
     os.chdir(DIR + "/DataBases")
-    
+
     try:
-        file = open(directory + "/" + file_name, "wb")
-        file.write(content)
-        file.close()
-        return SUCCESS
+
+        if os.path.exists(database):
+            os.chdir(database)
+
+            if os.path.exists(table):
+                os.chdir(table)
+                keys_file = open("index.json", "r+")
+                file_content = keys_file.read()
+                json_keys = json.loads(file_content)
+
+                if key in json_keys:
+                    for fileName in json_keys[key]:
+                        os.remove(fileName) 
+                    json_keys[key] = files_for_values(key, new_values)
+                    keys_file.seek(0)
+                    keys_file.write(json.dumps(json_keys))
+                    keys_file.truncate()
+                    keys_file.close()
+                    return json.dumps({"status": 201, "message": "Modification Successful"})
+
+                return json.dumps({"status": 404, "message": "Key Not Found"})
+
+            return json.dumps({"status": 404, "message": "Table Not Found"})
+
+        return json.dumps({"status": 404, "message": "Database Not Found"})
     except Exception as exception:
         return json.dumps({"status": 500, "message": " Unexpected Error"})
+
 
 def read(file_name):
     os.chdir(DIR + "/DataBases")

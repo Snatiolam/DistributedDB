@@ -64,14 +64,13 @@ class Table(Connection):
         jsonResponse = json.loads(strResponse)
         print("Received:", strResponse)
 
-    def update(self, key, oldval, newval):
+    def update(self, key, new_values):
         request = {
             "dbname": self.dbname,
             "table": self.table,
             "type": "update",
             "key": key,
-            "oldVal": oldval,
-            "newVal": newval,
+            "new_values": new_values,
             } 
         jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
