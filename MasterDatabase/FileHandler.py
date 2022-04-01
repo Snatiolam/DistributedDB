@@ -6,16 +6,21 @@ import os, errno
 def create(database, table, key, values):
     dir = os.getcwd()
     os.chdir("DataBases")
+
     try:
+
         if os.path.exists(database):
             os.chdir(database)
+
             if os.path.exists(table):
                 os.chdir(table)
                 keys_file = open("index.json", "r+")
                 file_content = keys_file.read()
                 json_keys = json.loads(file_content)
+
                 if key in json_keys:
                     return json.dumps({"status": 409, "message": "Key already exists"})
+
                 json_keys[key] = files_for_values(key, values)
                 keys_file.seek(0)
                 keys_file.write(json.dumps(json_keys))
@@ -28,6 +33,7 @@ def create(database, table, key, values):
                 keys_file = open("index.json", "w")
                 keys_file.write(json.dumps({key: values_array}))
                 keys_file.close()
+                
         else:
             os.mkdir(database)
             os.chdir(database)
@@ -37,6 +43,7 @@ def create(database, table, key, values):
             keys_file = open("index.json", "w")
             keys_file.write(json.dumps({key: values_array}))
             keys_file.close()
+
         return json.dumps({"status": 200, "message": "Success"})
     except Exception as exception:
         return json.dumps({"status": 500, "message": " Unexpected Error"})
@@ -46,14 +53,18 @@ def create(database, table, key, values):
 def delete(database, table, key):
     dir = os.getcwd()
     os.chdir("DataBases")
+
     try:
+
         if os.path.exists(database):
             os.chdir(database)
+
             if os.path.exists(table):
                 os.chdir(table)
                 keys_file = open("index.json", "r+")
                 file_content = keys_file.read()
                 json_keys = json.loads(file_content)
+
                 if key in json_keys:
                     for fileName in json_keys[key]:
                         os.remove(fileName) 
@@ -63,8 +74,11 @@ def delete(database, table, key):
                     keys_file.truncate()
                     keys_file.close()
                     return json.dumps({"status": 204, "message": "Resource Deleted"})
+
                 return json.dumps({"status": 404, "message": "Key Not Found"})
+
             return json.dumps({"status": 404, "message": "Table Not Found"})
+
         return json.dumps({"status": 404, "message": "Database Not Found"})
     except Exception as exception:
         return json.dumps({"status": 500, "message": " Unexpected Error"})
