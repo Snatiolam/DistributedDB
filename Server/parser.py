@@ -7,6 +7,7 @@ import debug
 from builtins import ConnectionRefusedError
 
 PORT = 3338
+INIFILE = "config.ini"
 
 def parseConfig(iniFile, operationType):
     config = configparser.ConfigParser()
@@ -62,7 +63,19 @@ def connectToServer(request, servers):
             debug.printSuccess(f"Connected to {serverIp, serverSock}")
             sock.sendall(request)
             response = sock.recv(1024)
-            print("Response:", response)
+            strResponse = response.decode('utf-8')
+            jsonResponse = json.loads(strResponse)
+
+            try:
+                if jsonResponse["server_errors"] == True:
+                    failed_servers = jsonResponse["failed_servers"]
+
+                    for server in failed_servers:
+                        deleteServer(server)
+                    print(failed_servers)
+            except:
+                debug.printError("Master server is not sending a valid response")
+
             sock.close()
             debug.printSuccess(f"Closed connection to {serverIp, serverSock}")
             break
@@ -74,3 +87,10 @@ def connectToServer(request, servers):
             servers.pop(randomServer)
             
     return response    
+
+def deleteServer(server, iniFile=INIFILE):
+    config = configparser.ConfigParser()
+    config.read(iniFile)
+    config.remove_option('Slaves', server)
+    with open(iniFile, "w") as file:
+        config.write(file)
