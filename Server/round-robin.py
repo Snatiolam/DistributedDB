@@ -37,13 +37,14 @@ def service_connection(key, mask):
             servers = parser.getServers(jsonRequest, "Server/config.ini")
             response = parser.connectToServer(data.outb, servers)
             if response == None:
+                response = b'There is no response from servers, the servers should be down'
                 print("\nThere is no response from servers, the servers should be down")
             else:
                 print("\nServer response:", response)
             # print("Random server:", databaseServer)
             # Logic before resetting data.outb var
             sent = sock.send(data.outb)
-            data.outb = data.outb[sent:]      
+            data.outb = data.outb[sent:] 
 
 def main():
     lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

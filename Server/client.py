@@ -6,8 +6,8 @@ myConnection = yadb.connect(HOST, 'MyDB')
 myTable = myConnection.get("Tabla Prueba")
 
 # myTable.put("key1", "algun dato simple o complejo")
-# myTable.get("key1")
-myTable.delete("key1", "value 1")
+myTable.get("key1")
+# myTable.delete("key1", "value 1")
 # myTable.update("key1", "old val", "new val")
 
 myTable.close()

@@ -30,7 +30,9 @@ class Table(Connection):
             } 
         jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
-        data = self.sock.recv(1024)
+        response = self.sock.recv(1024)
+        jsonResponse = json.loads(response.decode('utf-8').replace("'", '"'))
+        print("Received:", jsonResponse)
 
     def get(self, key):
         request = {
@@ -55,7 +57,9 @@ class Table(Connection):
             } 
         jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
-        data = self.sock.recv(1024)
+        response = self.sock.recv(1024)
+        jsonResponse = json.loads(response.decode('utf-8').replace("'", '"'))
+        print("Received:", jsonResponse)
 
     def update(self, key, oldval, newval):
         request = {
@@ -68,7 +72,9 @@ class Table(Connection):
             } 
         jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
-        data = self.sock.recv(1024)
+        response = self.sock.recv(1024)
+        jsonResponse = json.loads(response.decode('utf-8').replace("'", '"'))
+        print("Received:", jsonResponse)
 
 def connect(host, db):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
