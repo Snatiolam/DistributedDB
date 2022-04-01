@@ -1,3 +1,4 @@
+from curses import KEY_COPY
 import json
 from sre_constants import FAILURE, SUCCESS
 import os, errno
@@ -42,22 +43,44 @@ def create(database, table, key, values):
     finally:
         os.chdir(dir)
 
+def delete(database, table, key):
+    dir = os.getcwd()
+    os.chdir("DataBases")
+    try:
+        if os.path.exists(database):
+            os.chdir(database)
+            if os.path.exists(table):
+                os.chdir(table)
+                keys_file = open("index.json", "r+")
+                file_content = keys_file.read()
+                json_keys = json.loads(file_content)
+                if key in json_keys:
+                    for fileName in json_keys[key]:
+                        os.remove(fileName) 
+                    json_keys.pop(key)
+                    keys_file.seek(0)
+                    keys_file.write(json.dumps(json_keys))
+                    keys_file.truncate()
+                    keys_file.close()
+                    return json.dumps({"status": 204, "message": "Resource Deleted"})
+                return json.dumps({"status": 404, "message": "Key Not Found"})
+            return json.dumps({"status": 404, "message": "Table Not Found"})
+        return json.dumps({"status": 404, "message": "Database Not Found"})
+    except Exception as exception:
+        return json.dumps({"status": 500, "message": " Unexpected Error"})
+    finally:
+        os.chdir(dir)
+
 def update(file_name, content):
+    dir = os.getcwd()
+    os.chdir("DataBases")
     try:
         file = open(directory + "/" + file_name, "wb")
         file.write(content)
         file.close()
         return SUCCESS
     except Exception as exception:
-        return FAILURE
-def delete(file_name):
-    try:
-        if os.path.exists(directory + "/" + file_name):
-            os.remove(directory + "/" + file_name)
-            return "File deleted"
-        return "File doesnt exist"
-    except Exception as exception:
-        return FAILURE
+        return json.dumps({"status": 500, "message": " Unexpected Error"})
 
 def read(file_name):
     try:

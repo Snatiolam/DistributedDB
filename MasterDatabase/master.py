@@ -21,4 +21,5 @@ def update(variables_dict):
     pass
 
 def delete(variables_dict):
-    pass
+    return file_handler.delete(variables_dict["dbname"], variables_dict["table"], variables_dict["key"])
+    

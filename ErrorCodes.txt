@@ -1,6 +1,6 @@
 200: Succesfull
 201: Modification Successful
 204: Resource Deleted
-400: Not Found
+404: Not Found
 409: Conflict Already Exist
 500: Unexpected Error
