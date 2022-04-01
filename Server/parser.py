@@ -27,6 +27,7 @@ def parseRequest(request):
     # print('\n------- Parsing request --------')
     strRequest = request.decode('utf-8')
     strRequest = strRequest.replace('\'', '\"')
+    print(strRequest)
     jsonRequest = json.loads(strRequest)
     # print(jsonRequest)
     return jsonRequest
@@ -54,19 +55,21 @@ def connectToServer(request, servers):
         server = servers[randomServer]
         serverIp, serverSock = server.split(',')
         serverSock = int(serverSock)
-        print(f"Connecting to {serverIp, serverSock}")
+        response = b''
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.connect((serverIp, serverSock))
+            debug.printSuccess(f"Connected to {serverIp, serverSock}")
             sock.sendall(request)
-            data = sock.recv(1024)
+            response = sock.recv(1024)
+            print("Response:", response)
             sock.close()
-            print(f"Closed connection to {serverIp, serverSock}")
-            return data
+            debug.printSuccess(f"Closed connection to {serverIp, serverSock}")
+            break
         except ConnectionRefusedError:
             print("------------------------------------------")
             debug.printWarning(f"Warning: Server {serverIp, serverSock} is down")
             debug.printWarning("Trying connection with the other servers")
             print("------------------------------------------")
             servers.pop(randomServer)
-    return None    
+    return response    

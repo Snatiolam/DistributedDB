@@ -31,8 +31,9 @@ class Table(Connection):
         jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
         response = self.sock.recv(1024)
-        jsonResponse = json.loads(response.decode('utf-8').replace("'", '"'))
-        print("Received:", jsonResponse)
+        strResponse = response.decode('utf-8').replace("'", '"')
+        jsonResponse = json.loads(strResponse)
+        print("Received:", strResponse)
 
     def get(self, key):
         request = {
@@ -44,8 +45,9 @@ class Table(Connection):
         jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
         response = self.sock.recv(1024)
-        jsonResponse = json.loads(response.decode('utf-8').replace("'", '"'))
-        print("Received:", jsonResponse)
+        strResponse = response.decode('utf-8').replace("'", '"')
+        jsonResponse = json.loads(strResponse)
+        print("Received:", strResponse)
 
     def delete(self, key, value):
         request = {
@@ -58,8 +60,9 @@ class Table(Connection):
         jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
         response = self.sock.recv(1024)
-        jsonResponse = json.loads(response.decode('utf-8').replace("'", '"'))
-        print("Received:", jsonResponse)
+        strResponse = response.decode('utf-8').replace("'", '"')
+        jsonResponse = json.loads(strResponse)
+        print("Received:", strResponse)
 
     def update(self, key, oldval, newval):
         request = {
@@ -73,8 +76,9 @@ class Table(Connection):
         jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
         response = self.sock.recv(1024)
-        jsonResponse = json.loads(response.decode('utf-8').replace("'", '"'))
-        print("Received:", jsonResponse)
+        strResponse = response.decode('utf-8').replace("'", '"')
+        jsonResponse = json.loads(strResponse)
+        print("Received:", strResponse)
 
 def connect(host, db):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

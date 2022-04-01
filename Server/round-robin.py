@@ -36,15 +36,17 @@ def service_connection(key, mask):
             jsonRequest = parser.parseRequest(data.outb)
             servers = parser.getServers(jsonRequest, "Server/config.ini")
             response = parser.connectToServer(data.outb, servers)
-            if response == None:
-                response = b'There is no response from servers, the servers should be down'
+            if response == b'':
+                response = b'{"status" : 500, "message" : "Error"}'
                 debug.printError("\nThere is no response from servers, the servers should be down")
-            else:
-                print("\nServer response:", response)
-            # print("Random server:", databaseServer)
+            print("Response but in round:", response)
             # Logic before resetting data.outb var
-            sent = sock.send(data.outb)
-            data.outb = data.outb[sent:] 
+            sock.send(response)
+            data.outb = b''
+
+            # Not sure what below iw happening
+            # sent = sock.send(data.outb)
+            # data.outb = data.outb[sent:] 
 
 def main():
     lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
