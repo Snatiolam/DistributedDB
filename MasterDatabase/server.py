@@ -1,3 +1,5 @@
+import json
+import master
 import socket
 import selectors
 import types
@@ -34,15 +36,16 @@ def service_connection(key, mask):
     if mask & selectors.EVENT_WRITE:
         if data.outb:
             jsonRequest = parser.parseRequest(data.outb)
-            print(jsonRequest)
+            result = master.process_request(jsonRequest)
             #servers = parser.getServers(jsonRequest, "Server/config.ini")
             #databaseServer = getRandomServer(servers)
             #response = parser.connectToServer(data.outb, servers[databaseServer])
             # print("Random server:", databaseServer)
             # Logic before resetting data.outb var
-            
-            sent = sock.send(data.outb)
-            data.outb = data.outb[sent:]      
+            sock.send(bytes(str(result), 'utf-8'))
+            # sent = sock.send(bytes(str(result), 'utf-8'))  # Should be ready to write
+            # data.outb = data.outb[sent:]   
+            data.outb = b""   
 
 
 def main():

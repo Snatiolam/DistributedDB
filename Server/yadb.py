@@ -26,7 +26,7 @@ class Table(Connection):
             "table": self.table,
             "type": "create",
             "key": key,
-            "value": value
+            "values": value
             } 
         jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
@@ -55,7 +55,7 @@ class Table(Connection):
             "table": self.table,
             "type": "delete",
             "key": key,
-            "value": value,
+            "values": value,
             } 
         jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)

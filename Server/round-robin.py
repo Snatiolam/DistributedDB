@@ -37,7 +37,7 @@ def service_connection(key, mask):
 
         if data.outb:
             jsonRequest = parser.parseRequest(data.outb)
-            servers = parser.getServers(jsonRequest, "Server/config.ini")
+            servers = parser.getServers(jsonRequest, "config.ini")
             response = parser.connectToServer(data.outb, servers)
 
             if response == b'':
