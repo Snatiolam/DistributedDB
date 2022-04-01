@@ -3,9 +3,10 @@ import json
 from sre_constants import FAILURE, SUCCESS
 import os, errno
 
+DIR = os.getcwd()
+
 def create(database, table, key, values):
-    dir = os.getcwd()
-    os.chdir("DataBases")
+    os.chdir(DIR + "/DataBases")
 
     try:
 
@@ -47,12 +48,9 @@ def create(database, table, key, values):
         return json.dumps({"status": 200, "message": "Success"})
     except Exception as exception:
         return json.dumps({"status": 500, "message": " Unexpected Error"})
-    finally:
-        os.chdir(dir)
 
 def delete(database, table, key):
-    dir = os.getcwd()
-    os.chdir("DataBases")
+    os.chdir(DIR + "/DataBases")
 
     try:
 
@@ -82,12 +80,10 @@ def delete(database, table, key):
         return json.dumps({"status": 404, "message": "Database Not Found"})
     except Exception as exception:
         return json.dumps({"status": 500, "message": " Unexpected Error"})
-    finally:
-        os.chdir(dir)
 
 def update(file_name, content):
-    dir = os.getcwd()
-    os.chdir("DataBases")
+    os.chdir(DIR + "/DataBases")
+    
     try:
         file = open(directory + "/" + file_name, "wb")
         file.write(content)
@@ -97,6 +93,8 @@ def update(file_name, content):
         return json.dumps({"status": 500, "message": " Unexpected Error"})
 
 def read(file_name):
+    os.chdir(DIR + "/DataBases")
+
     try:
         file = open(directory + "/" + file_name, "rb")
         content = file.read()
