@@ -4,6 +4,7 @@ import configparser
 import json
 import socket
 import random
+from colorama import Fore
 
 from builtins import ConnectionRefusedError
 
@@ -64,8 +65,8 @@ def connectToServer(request, servers):
             return data
         except ConnectionRefusedError:
             print("------------------------------------------")
-            print(f"Server ({serverIp, serverSock}) is down")
-            print("Retrying connection with the other servers")
+            print(Fore.YELLOW + f"Warning: Server {serverIp, serverSock} is down")
+            print(Fore.YELLOW + "Retrying connection with the other servers" + Fore.WHITE)
             print("------------------------------------------")
             servers.pop(randomServer)
     return None    
