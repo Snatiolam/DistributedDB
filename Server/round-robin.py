@@ -11,10 +11,6 @@ sel = selectors.DefaultSelector()
 HOST = "127.0.0.1"
 PORT = 3337
 
-def getRandomServer(servers):
-    serverNames = list(servers)
-    return random.choice(serverNames)
-
 def accept_wrapper(sock):
     conn, addr = sock.accept()
     print(f"Accepted connection from {addr}")
@@ -31,7 +27,7 @@ def service_connection(key, mask):
         if recv_data:
             data.outb += recv_data
         else:
-            print(f"Closing connection to {data.addr}")
+            print(f"\nClosing connection to {data.addr}")
             sel.unregister(sock)
             sock.close()
 
@@ -39,9 +35,11 @@ def service_connection(key, mask):
         if data.outb:
             jsonRequest = parser.parseRequest(data.outb)
             servers = parser.getServers(jsonRequest, "Server/config.ini")
-            databaseServer = getRandomServer(servers)
-            response = parser.connectToServer(data.outb, servers[databaseServer])
-            print("Prueba:", response)
+            response = parser.connectToServer(data.outb, servers)
+            if response == None:
+                print("\nThere is no response from servers, the servers should be down")
+            else:
+                print("\nServer response:", response)
             # print("Random server:", databaseServer)
             # Logic before resetting data.outb var
             sent = sock.send(data.outb)

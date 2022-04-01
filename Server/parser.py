@@ -3,6 +3,8 @@
 import configparser
 import json
 import socket
+import random
+
 from builtins import ConnectionRefusedError
 
 PORT = 3338
@@ -41,19 +43,29 @@ def getServers(jsonRequest, iniFile):
     servers = parseConfig(iniFile, operationType)
     return servers
 
-def connectToServer(request, server):
-    serverIp, serverSock = server.split(',')
-    serverSock = int(serverSock)
-    print(f"Connecting to {serverIp, serverSock}")
-    try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((serverIp, serverSock))
-        sock.sendall(request)
-        data = sock.recv(1024)
-        sock.close()
-        print(f"Closed connection to {serverIp, serverSock}")
-    except:
-        print(f"Server ({serverIp, serverSock}) is down")
-    
-    return data
-            
+def getRandomServer(servers):
+    serverNames = list(servers)
+    return random.choice(serverNames)
+
+def connectToServer(request, servers):
+    while len(servers) > 0:
+        randomServer = getRandomServer(servers)
+        server = servers[randomServer]
+        serverIp, serverSock = server.split(',')
+        serverSock = int(serverSock)
+        print(f"Connecting to {serverIp, serverSock}")
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.connect((serverIp, serverSock))
+            sock.sendall(request)
+            data = sock.recv(1024)
+            sock.close()
+            print(f"Closed connection to {serverIp, serverSock}")
+            return data
+        except ConnectionRefusedError:
+            print("------------------------------------------")
+            print(f"Server ({serverIp, serverSock}) is down")
+            print("Retrying connection with the other servers")
+            print("------------------------------------------")
+            servers.pop(randomServer)
+    return None    

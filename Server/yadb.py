@@ -1,3 +1,4 @@
+import json
 import socket
 
 PORT = 3337  # The port used by the server
@@ -20,42 +21,44 @@ class Table(Connection):
         self.table = table
 
     def put(self, key, value):
-        json = {
+        request = {
             "dbname": self.dbname,
             "table": self.table,
             "type": "create",
             "key": key,
             "value": value
             } 
-        jsonBytes = bytes(str(json), 'utf-8') 
+        jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
         data = self.sock.recv(1024)
 
     def get(self, key):
-        json = {
+        request = {
             "dbname": self.dbname,
             "table": self.table,
             "type": "read",
             "key": key,
             } 
-        jsonBytes = bytes(str(json), 'utf-8') 
+        jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
-        data = self.sock.recv(1024)
+        response = self.sock.recv(1024)
+        jsonResponse = json.loads(response.decode('utf-8').replace("'", '"'))
+        print("Received:", jsonResponse)
 
     def delete(self, key, value):
-        json = {
+        request = {
             "dbname": self.dbname,
             "table": self.table,
             "type": "delete",
             "key": key,
             "value": value,
             } 
-        jsonBytes = bytes(str(json), 'utf-8') 
+        jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
         data = self.sock.recv(1024)
 
     def update(self, key, oldval, newval):
-        json = {
+        request = {
             "dbname": self.dbname,
             "table": self.table,
             "type": "update",
@@ -63,7 +66,7 @@ class Table(Connection):
             "oldVal": oldval,
             "newVal": newval,
             } 
-        jsonBytes = bytes(str(json), 'utf-8') 
+        jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
         data = self.sock.recv(1024)
 
