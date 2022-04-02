@@ -18,6 +18,7 @@ def create(database, table, key, values):
                 json_keys = json.loads(file_content)
 
                 if key in json_keys:
+                    os.chdir(DIR)
                     return {"status": 409, "message": "Key already exists"}
 
                 json_keys[key] = files_for_values(key, values)
@@ -43,8 +44,10 @@ def create(database, table, key, values):
             keys_file.write(json.dumps({key: values_array}))
             keys_file.close()
 
+        os.chdir(DIR)
         return {"status": 200, "message": "Success"}
     except Exception as exception:
+        os.chdir(DIR)
         return {"status": 500, "message": " Unexpected Error"}
 
 def delete(database, table, key):
@@ -69,14 +72,19 @@ def delete(database, table, key):
                     keys_file.write(json.dumps(json_keys))
                     keys_file.truncate()
                     keys_file.close()
+                    os.chdir(DIR)
                     return {"status": 204, "message": "Resource Deleted"}
 
+                os.chdir(DIR)
                 return {"status": 404, "message": "Key Not Found"}
 
+            os.chdir(DIR)
             return {"status": 404, "message": "Table Not Found"}
 
+        os.chdir(DIR)
         return {"status": 404, "message": "Database Not Found"}
     except Exception as exception:
+        os.chdir(DIR)
         return {"status": 500, "message": " Unexpected Error"}
 
 def update(database, table, key, new_values):
@@ -101,14 +109,17 @@ def update(database, table, key, new_values):
                     keys_file.write(json.dumps(json_keys))
                     keys_file.truncate()
                     keys_file.close()
+                    os.chdir(DIR)
                     return {"status": 201, "message": "Modification Successful"}
 
+                os.chdir(DIR)
                 return {"status": 404, "message": "Key Not Found"}
-
+            os.chdir(DIR)
             return {"status": 404, "message": "Table Not Found"}
-
+        os.chdir(DIR)
         return {"status": 404, "message": "Database Not Found"}
     except Exception as exception:
+        os.chdir(DIR)
         return {"status": 500, "message": " Unexpected Error"}
 
 
@@ -134,14 +145,19 @@ def read(database, table, key):
                         values_array.append(content)
                         file.close()
                     keys_file.close()
+                    os.chdir(DIR)
                     return {"status": 200, "message": "Succesfull", "values": values_array}
 
+                os.chdir(DIR)
                 return {"status": 404, "message": "Key Not Found"}
 
+            os.chdir(DIR)
             return {"status": 404, "message": "Table Not Found"}
 
+        os.chdir(DIR)
         return {"status": 404, "message": "Database Not Found"}
     except Exception as exception:
+        os.chdir(DIR)
         return {"status": 500, "message": " Unexpected Error"}
 
 def files_for_values(key, values):

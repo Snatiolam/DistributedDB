@@ -3,12 +3,12 @@ import json
 import socket
 import random
 import debug
-
 from builtins import ConnectionRefusedError
+import os
 
 PORT = 3338
 
-FILE = 'config.ini'
+FILE = "config.ini"
 
 def parseRequest(request):
     # print('\n------- Parsing request --------')
@@ -22,7 +22,6 @@ def parseRequest(request):
 def getSlavesServers():
     config = configparser.ConfigParser()
     config.read(FILE)
-    debug.printSuccess(str(config))
     servers = dict(config.items('Slaves'))
     return servers
 
@@ -31,7 +30,6 @@ def connectToServer(request):
     servers = getSlavesServers()
     servers_errors = False
     failed_servers = list()
-    debug.printSuccess(str(servers))
     for key, server in servers.items():
         serverIp, serverSock = server.split(',')
         serverSock = int(serverSock)
@@ -50,7 +48,7 @@ def connectToServer(request):
         except ConnectionRefusedError:
             servers_errors = True
             failed_servers.append(key)
-            #deleteServer(key)
+            deleteServer(key)
             debug.printError(f"Connection refused to {key, serverIp, serverSock}")
             
     return servers_errors, failed_servers
