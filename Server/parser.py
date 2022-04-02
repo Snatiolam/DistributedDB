@@ -63,19 +63,23 @@ def connectToServer(request, servers):
             debug.printSuccess(f"Connected to {serverIp, serverSock}")
             sock.sendall(request)
             response = sock.recv(1024)
-            strResponse = response.decode('utf-8')
-            jsonResponse = json.loads(strResponse)
 
-            try:
-                if jsonResponse["servers_errors"] == True:
-                    failed_servers = jsonResponse["failed_servers"]
+            if response != b'':
+                strResponse = response.decode('utf-8').replace('\'', '"')
+                jsonResponse = json.loads(strResponse)
 
-                    for server in failed_servers:
-                        deleteServer(server)
-                    print(failed_servers)
-            except:
-                debug.printError("Master server is not sending a valid response")
+                try:
 
+                    if jsonResponse["servers_errors"] == True:
+                        failed_servers = jsonResponse["failed_servers"]
+
+                        for server in failed_servers:
+                            deleteServer(server)
+                        print(failed_servers)
+                except:
+                    debug.printError("Master server is not sending a valid response")
+            else:
+                debug.printWarning(f"Warning: The server {(serverIp, serverSock)} unexpected closed connection")
             sock.close()
             debug.printSuccess(f"Closed connection to {serverIp, serverSock}")
             break
