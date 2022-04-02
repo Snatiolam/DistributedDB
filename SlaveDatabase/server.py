@@ -1,5 +1,4 @@
-import json
-import master
+import slave
 import socket
 import selectors
 import types
@@ -9,7 +8,7 @@ import random
 sel = selectors.DefaultSelector()
 
 HOST = "127.0.0.1"
-PORT = 3340
+PORT = 3338
 
 sel = selectors.DefaultSelector()
 
@@ -37,14 +36,13 @@ def service_connection(key, mask):
         if data.outb:
             jsonRequest = parser.parseRequest(data.outb)
             if(jsonRequest["type"] == "create"):
-                result = master.create(jsonRequest)
+                result = slave.create(jsonRequest)
             elif(jsonRequest["type"] == "read"):
-                result = master.read(jsonRequest)
+                result = slave.read(jsonRequest)
             elif(jsonRequest["type"] == "update"):
-                result = master.update(jsonRequest)
+                result = slave.update(jsonRequest)
             elif(jsonRequest["type"] == "delete"):
-                result = master.delete(jsonRequest)
-            print(result)
+                result = slave.delete(jsonRequest)
             #servers = parser.getServers(jsonRequest, "Server/config.ini")
             #databaseServer = getRandomServer(servers)
             #response = parser.connectToServer(data.outb, servers[databaseServer])

@@ -67,7 +67,7 @@ def connectToServer(request, servers):
             jsonResponse = json.loads(strResponse)
 
             try:
-                if jsonResponse["server_errors"] == True:
+                if jsonResponse["servers_errors"] == True:
                     failed_servers = jsonResponse["failed_servers"]
 
                     for server in failed_servers:

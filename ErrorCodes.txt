@@ -4,3 +4,10 @@
 404: Not Found
 409: Conflict Already Exist
 500: Unexpected Error
+
+
+
+{
+    servers_errors : true | false
+    failed_servers : ["server1", "server2"]
+}
