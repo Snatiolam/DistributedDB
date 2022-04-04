@@ -6,8 +6,9 @@ def create(variables_dict):
     return json.dumps(response) 
 
 def read(variables_dict):
-    return database.read(variables_dict["dbname"], variables_dict["table"], variables_dict["key"])
-    
+    response = database.read(variables_dict["dbname"], variables_dict["table"], variables_dict["key"])
+    response["server"] = "127.0.0.1:3338 (Slave1)"
+    return json.dumps(response)    
 def update(variables_dict):
     response = database.update(variables_dict["dbname"], variables_dict["table"], variables_dict["key"], variables_dict["new_values"])
     return json.dumps(response) 

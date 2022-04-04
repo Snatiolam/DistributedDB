@@ -75,7 +75,7 @@ def connectToServer(request, servers):
                             deleteServer(server)
                         print(failed_servers)
                 except:
-                    debug.printError("Master server is not sending a valid response")
+                    debug.printWarning("Master might be sending an invalid response")
             else:
                 debug.printWarning(f"Warning: The server {(serverIp, serverSock)} unexpected closed connection")
             sock.close()
