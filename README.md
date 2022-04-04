@@ -69,6 +69,6 @@ Options:
     
 ### References
 - https://realpython.com/python-sockets/
-- https://elvex.ugr.es/decsai/information- systems/slides/32%20Data%20Access%20- %20NoSQL.pdf
-- https://www.acens.com/wp- content/images/2014/02/bbdd-nosql-wp- acens.pdf
-- https://es.wikipedia.org/wiki/Base_de_datos_ distribuida
+- https://elvex.ugr.es/decsai/information-systems/slides/32%20Data%20Access%20-%20NoSQL.pdf
+- https://www.acens.com/wp-content/images/2014/02/bbdd-nosql-wp-acens.pdf
+- https://es.wikipedia.org/wiki/Base_de_datos_distribuida
