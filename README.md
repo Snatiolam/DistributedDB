@@ -69,7 +69,6 @@ Options:
     
 ### References
 - https://realpython.com/python-sockets/
-- https://docs.python.org/3/howto/sockets.html
-- https://www.geeksforgeeks.org/socket-programming-python/
-- https://typer.tiangolo.com/
-- https://stackabuse.com/guide-to-parsing-html-with-beautifulsoup-in-python/
+- https://elvex.ugr.es/decsai/information- systems/slides/32%20Data%20Access%20- %20NoSQL.pdf
+- https://www.acens.com/wp- content/images/2014/02/bbdd-nosql-wp- acens.pdf
+- https://es.wikipedia.org/wiki/Base_de_datos_ distribuida
