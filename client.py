@@ -8,7 +8,7 @@ def main(create: bool = False, read: bool = False, update: bool = False, delete:
     myConnection = yadb.connect(HOST, database)
     myTable = myConnection.get(table)
     if create:
-        #python client.py --create Siata Estaciones 001 "hola como estas?", "cama"
+        #python client.py --create Eafit Sistemas Telematica "La mejor clase del mundo" "Vamos a sacar 5.0"
         if values is None:
             raise typer.Exit('You must provide values for create operation')
         typer.echo("Creating new key")
@@ -17,14 +17,14 @@ def main(create: bool = False, read: bool = False, update: bool = False, delete:
         myTable.put(key, values)
         myTable.close()
     elif read:
-        #python client.py --read Siata Estaciones 001
+        #python client.py --read Eafit Sistemas Telematica
         typer.echo("Reading a key")
         typer.echo(key)
         lista = myTable.get(key)
         typer.echo(lista)
         myTable.close()
     elif update:
-        #python client.py --update Siata Estaciones 001 "Estoy muy bien, gracias", "avion", "restaurante"
+        #python client.py --update Eafit Sistemas Telematica "Amamos telematica" "Tiene el mejor profesor del mundo", "Nos va a invitar a comer"
         if values is None:
             raise typer.Exit('You must provide values for update operation')
         typer.echo("Updating a key")
@@ -32,7 +32,7 @@ def main(create: bool = False, read: bool = False, update: bool = False, delete:
         myTable.update(key, values)
         myTable.close()
     elif delete:
-        #python client.py --delete Siata Estaciones 001
+        #python client.py --delete Eafit Sistemas Telematica
         typer.echo("Deleting a key")
         typer.echo(key)
         typer.echo(key + ": " + str(values))
