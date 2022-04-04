@@ -3,7 +3,7 @@ import socket
 import selectors
 import types
 import parser
-import random
+import debug
 
 sel = selectors.DefaultSelector()
 
@@ -14,7 +14,7 @@ sel = selectors.DefaultSelector()
 
 def accept_wrapper(sock):
     conn, addr = sock.accept()
-    print(f"Accepted connection from {addr}")
+    debug.printSuccess(f"Accepted connection from {addr}")
     conn.setblocking(False)
     data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"")
     events = selectors.EVENT_READ | selectors.EVENT_WRITE
@@ -28,7 +28,7 @@ def service_connection(key, mask):
         if recv_data:
             data.outb += recv_data
         else:
-            print(f"Closing connection to {data.addr}")
+            debug.printWarning(f"Closing connection to {data.addr}")
             sel.unregister(sock)
             sock.close()
 
@@ -43,14 +43,8 @@ def service_connection(key, mask):
                 result = slave.update(jsonRequest)
             elif(jsonRequest["type"] == "delete"):
                 result = slave.delete(jsonRequest)
-            #servers = parser.getServers(jsonRequest, "Server/config.ini")
-            #databaseServer = getRandomServer(servers)
-            #response = parser.connectToServer(data.outb, servers[databaseServer])
-            # print("Random server:", databaseServer)
-            # Logic before resetting data.outb var
+            print(result)
             sock.send(bytes(str(result), 'utf-8'))
-            # sent = sock.send(bytes(str(result), 'utf-8'))  # Should be ready to write
-            # data.outb = data.outb[sent:]   
             data.outb = b""   
 
 
@@ -58,7 +52,7 @@ def main():
     lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     lsock.bind((HOST, PORT))
     lsock.listen()
-    print(f"Listening on {(HOST, PORT)}")
+    debug.printSuccess(f"Listening on {(HOST, PORT)}")
     sel.register(lsock, selectors.EVENT_READ, data=None)
 
     try:
@@ -70,7 +64,7 @@ def main():
                 else:
                     service_connection(key, mask)
     except KeyboardInterrupt:
-        print("Caught keyboard interrupt, exiting")
+        debug.printWarning("Caught keyboard interrupt, exiting")
     finally:
         sel.close()
 

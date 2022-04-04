@@ -44,14 +44,8 @@ def service_connection(key, mask):
                 response = b'{"status" : 500, "message" : "Error"}'
                 debug.printError("\nThere is no response from servers, the servers should be down")
                 
-            # print("Response but in round:", response)
-            # Logic before resetting data.outb var
             sock.send(response)
             data.outb = b''
-
-            #  ----- Not sure what below is happening -------
-            # sent = sock.send(data.outb)
-            # data.outb = data.outb[sent:] 
 
 def main():
     lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

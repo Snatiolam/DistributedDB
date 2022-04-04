@@ -162,5 +162,5 @@ cython_debug/
 #.idea/
 MasterDatabase/.DS_Store
 .DS_Store
-MasterDatabase/database
 MasterDatabase/DataBases
+SlaveDatabase/DataBases

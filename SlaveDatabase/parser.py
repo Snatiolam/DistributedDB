@@ -1,12 +1,10 @@
 import json
-
-PORT = 3338
+import debug
 
 def parseRequest(request):
-    # print('\n------- Parsing request --------')
     strRequest = request.decode('utf-8')
     strRequest = strRequest.replace('\'', '\"')
+    debug.printSuccess('\n------- Parsing request --------')
     print(strRequest)
     jsonRequest = json.loads(strRequest)
-    # print(jsonRequest)
     return jsonRequest

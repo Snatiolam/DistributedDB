@@ -1,22 +1,17 @@
 import configparser
 import json
 import socket
-import random
 import debug
 from builtins import ConnectionRefusedError
-import os
-
-PORT = 3338
 
 FILE = "config.ini"
 
 def parseRequest(request):
-    # print('\n------- Parsing request --------')
     strRequest = request.decode('utf-8')
     strRequest = strRequest.replace('\'', '\"')
+    debug.printSuccess('\n------- Parsing request --------')
     print(strRequest)
     jsonRequest = json.loads(strRequest)
-    # print(jsonRequest)
     return jsonRequest
 
 def getSlavesServers():

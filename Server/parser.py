@@ -24,12 +24,10 @@ def parseConfig(iniFile, operationType):
     return sectionItems
 
 def parseRequest(request):
-    # print('\n------- Parsing request --------')
     strRequest = request.decode('utf-8')
     strRequest = strRequest.replace('\'', '\"')
     print(strRequest)
     jsonRequest = json.loads(strRequest)
-    # print(jsonRequest)
     return jsonRequest
     
 def getServers(jsonRequest, iniFile):

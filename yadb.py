@@ -51,13 +51,12 @@ class Table(Connection):
         if jsonResponse["status"] == 200:
             return jsonResponse["values"]
 
-    def delete(self, key, value):
+    def delete(self, key):
         request = {
             "dbname": self.dbname,
             "table": self.table,
             "type": "delete",
             "key": key,
-            "values": value,
             } 
         jsonBytes = bytes(str(request), 'utf-8') 
         self.sock.sendall(jsonBytes)
